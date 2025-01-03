@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Web Opening</title>
+    <style>
+        /* styles.css */
+        
+        @import url('https://fonts.googleapis.com/css2?family=Clicker+Script&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Clicker Script', cursive;
+            background-color: #121212;
+            color: white;
+        }
+        /* Intro Section */
+        
+        .intro {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        /* Background Animation */
+        
+        .background {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-color: white;
+            animation: rotateBackground 5s linear infinite;
+        }
+        /* Logo Container */
+        
+        .lagi-container {
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transform: scale(0);
+            opacity: 0;
+        }
+        
+        .lagi {
+            width: 20vw;
+            /* Responsif width */
+            height: 20vw;
+            /* Responsif height */
+            max-width: 150px;
+            /* Maximum size */
+            max-height: 150px;
+            /* Maximum size */
+        }
+        /* Teks di bawah logo */
+        
+        .lagi-text {
+            margin-top: 2vh;
+            /* Responsif margin */
+            font-size: 3vw;
+            /* Responsif font size */
+            font-weight: bold;
+            color: black;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        /* Hidden Content */
+        
+        .hidden {
+            display: none;
+        }
+        /* Background Rotation */
+        
+        @keyframes rotateBackground {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        /* Media Queries for Small Screens */
+        
+        @media screen and (max-width: 768px) {
+            .lagi {
+                width: 30vw;
+                /* Smaller logos for smaller screens */
+                height: 30vw;
+                /* Adjust height as well */
+            }
+            .lagi-text {
+                font-size: 6vw;
+                /* Adjust text size for small screens */
+            }
+        }
+        /* Media Queries for Very Small Screens (Mobile) */
+        
+        @media screen and (max-width: 480px) {
+            .lagi {
+                width: 40vw;
+                /* Even smaller logos */
+                height: 40vw;
+                /* Adjust accordingly */
+            }
+            .lagi-text {
+                font-size: 8vw;
+                /* Bigger text for mobile */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Opening Animation -->
+    <div class="intro">
+        <!-- Background Animation -->
+        <div class="background"></div>
+
+        <!-- Logo Animation -->
+        <div class="lagi-container">
+            <!-- Ganti teks dengan gambar logo -->
+            <img class="lagi" src="logo.png" alt="Logo" style="text-align: center;">
+            <!-- Teks di bawah logo -->
+            <div class="lagi-text">Syafiq</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content hidden">
+        <h1>Welcome to My Website</h1>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // script.js
+        document.addEventListener("DOMContentLoaded", () => {
+            const intro = document.querySelector(".intro");
+            const content = document.querySelector(".content");
+            const lagiContainer = document.querySelector(".lagi-container");
+            const lagiText = document.querySelector(".lagi-text");
+
+            const tl = gsap.timeline();
+
+            // Logo Animation
+            tl.to(lagiContainer, {
+                    duration: 0.5,
+                    scale: 1,
+                    opacity: 1,
+                    ease: "bounce.out",
+                })
+                .to(lagiContainer, {
+                    duration: 0.5,
+                    rotation: 360,
+                    scale: 1.1,
+                    ease: "power2.out",
+                }, "+=0.25")
+
+            // Teks di bawah logo
+            .to(lagiText, {
+                duration: 0.5,
+                opacity: 1,
+                y: 0,
+                ease: "power2.out",
+            })
+
+            // Transition to Main Content
+            .to(".intro", {
+                duration: 0, // No opacity change here
+                onComplete: () => {
+                    intro.style.display = "none"; // Remove intro from view
+                    content.classList.remove("hidden"); // Show content
+                },
+            });
+        });
+    </script>
+</body>
+
+</html>

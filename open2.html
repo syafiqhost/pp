@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Carousel</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        /* Tidak tampil secara default */
+        
+        .carousel {
+            display: none;
+        }
+        /* Media query: Tampilkan carousel di perangkat kecil */
+        
+        @media (max-width: 768px) {
+            .carousel {
+                display: block;
+                /* Tampilkan hanya di perangkat kecil */
+                position: relative;
+                overflow: hidden;
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .carousel-track-kontainer {
+                overflow: hidden;
+                position: relative;
+            }
+            .carousel-track {
+                display: flex;
+                transition: transform 0.5s ease-in-out;
+            }
+            .carousel-imgg {
+                min-width: 100%;
+                height: auto;
+            }
+            .carousel-batin {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: transparent;
+                border: none;
+                color: white;
+                font-size: 2rem;
+                cursor: pointer;
+                z-index: 2;
+            }
+            .carousel-batin-kiri {
+                left: 10px;
+            }
+            .carousel-batin-kanan {
+                right: 10px;
+            }
+            .carousel-nav {
+                display: flex;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .carousel-indicator {
+                width: 10px;
+                height: 10px;
+                margin: 5px;
+                border: none;
+                border-radius: 50%;
+                background: gray;
+                cursor: pointer;
+            }
+            .carousel-indicator.active {
+                background: black;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="carousel">
+        <div class="carousel-track-kontainer">
+            <div class="carousel-track">
+                <img src="sd1.jpg" alt="Image 1" class="carousel-imgg">
+                <img src="sd2.jpg" alt="Image 2" class="carousel-imgg">
+                <img src="sd3.jpg" alt="Image 3" class="carousel-imgg">
+                <img src="sd4.jpg" alt="Image 4" class="carousel-imgg">
+            </div>
+        </div>
+        <button class="carousel-batin carousel-batin-kiri">&lt;</button>
+        <button class="carousel-batin carousel-batin-kanan">&gt;</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const track = document.querySelector(".carousel-track");
+            const slides = Array.from(track.children);
+            const nextBatin = document.querySelector(".carousel-batin-kanan");
+            const prevBatin = document.querySelector(".carousel-batin-kiri");
+            const slideWidth = slides[0].getBoundingClientRect().width;
+
+            let currentIndex = 0;
+            let autoSlideInterval = setInterval(nextSlide, 3000);
+
+            // Arrange slides next to each other
+            slides.forEach((slide, index) => {
+                slide.style.left = slideWidth * index + "px";
+            });
+
+            // Move to slide
+            const moveToSlide = (index) => {
+                track.style.transform = `translateX(-${slideWidth * index}px)`;
+            };
+
+            // Next slide
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % slides.length;
+                moveToSlide(currentIndex);
+            }
+
+            // Previous slide
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                moveToSlide(currentIndex);
+            }
+
+            // Batin click
+            nextBatin.addEventListener("click", () => {
+                nextSlide();
+                resetAutoSlide();
+            });
+
+            prevBatin.addEventListener("click", () => {
+                prevSlide();
+                resetAutoSlide();
+            });
+
+            // Swipe Gesture
+            let startX = 0;
+            let endX = 0;
+
+            track.addEventListener("touchstart", (e) => {
+                startX = e.touches[0].clientX;
+            });
+
+            track.addEventListener("touchend", (e) => {
+                endX = e.changedTouches[0].clientX;
+                if (startX > endX + 50) nextSlide();
+                if (startX < endX - 50) prevSlide();
+                resetAutoSlide();
+            });
+
+            // Reset auto-slide timer
+            function resetAutoSlide() {
+                clearInterval(autoSlideInterval);
+                autoSlideInterval = setInterval(nextSlide, 3000);
+            }
+        });
+    </script>
+</body>
+
+</html>
